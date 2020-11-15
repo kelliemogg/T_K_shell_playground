@@ -1,8 +1,11 @@
 #include "header.h"
 
-int main(void)
+int main(int argc, char *argv[])
 {
+	printf("I am %d\n", (int) getpid());
+
 	pid_t pid = fork();
+	printf("fork returned: %d\n", (int) pid);
 
 	if(pid == 0)
 	{
