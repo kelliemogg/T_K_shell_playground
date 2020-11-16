@@ -1,28 +1,53 @@
 #include "header.h"
-int main(void)
+int main(int argc, char *argv[])
 {
 	char *prompt = "Enter a command:\n";
 	char *oneword = "One word only please\n";
-	char *buffer;
+	char *getlinebuffer;
 	size_t bufsize = 32;
 	char *newline = "\n";
 	int runtime;
 	int userinput;
 	char *exit = "exit";
+	char *ls = "ls";
+	pid_t pid;
+        char *cwdbuffer;
+        size_t cwdsize;
+        char *pathname = getcwd(cwdbuffer, cwdsize); /* gets full path of current directory*/
+        char *const args[] = {"/bin/ls", "-l", pathname, NULL};
+        char *const envp[] = {NULL};
 
-	buffer = malloc(sizeof(char) * bufsize);
+	getlinebuffer = malloc(sizeof(char) * bufsize);
 	while (runtime)
 	{
 		write(STDOUT_FILENO, prompt, stringlength(prompt));
-		userinput = getline(&buffer, &bufsize, stdin);
-		if (_strchr(buffer, ' ') != '\0')
+		userinput = getline(&getlinebuffer, &bufsize, stdin);
+		if (_strchr(getlinebuffer, ' ') != '\0')
+		{
 			write(STDOUT_FILENO, oneword, stringlength(oneword));
-		if (_strcmp(buffer, exit) == 0)
+			continue;
+		}
+		if (_strcmp(getlinebuffer, exit) == 0)
 		{
 			break;
 		}
+		if (_strcmp(getlinebuffer, ls) == 0) /*ls implementation with no args*/
+		{
+			pid = fork();
+			if (pid < 0)
+				perror("Fork failure");
+			if (pid == 0)
+			{
+				if (execve(args[0], args, envp) == -1)
+					perror("Execve failure");
+			}
+			else
+			{
+			wait(NULL);
+			}
+		}
 	}
-free(buffer);
+free(getlinebuffer);
 return (0);
 }
 int stringlength(char *s)
