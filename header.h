@@ -14,6 +14,9 @@ char _strchr(char *s, char c);
 int fork_process(void);
 int stringlength(char *s);
 char *read_line(void);
+char *read_command(void);
+char *tokenizer(void);
+int execute_cmd(char **args);
 
 char *envp[] =
 {
