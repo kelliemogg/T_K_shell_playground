@@ -11,15 +11,15 @@ int main(void)
 		args = tokenizer();
 		status = execute_cmd();
 
-		free (line);
-		free (args);
+		free (line); /*unsure why*/
+		free (args); /* unsure why*/
 	} while (status);
 }
 
-int *read_command(void)
+char *read_command(void)
 {
         size_t bufsize = 0;
-        char *line;
+        char *line = NULL;
 
 	if (getline(&bufsize, &line, stdin))
 	{
@@ -32,7 +32,7 @@ int *read_command(void)
 	return(line);
 }
 
-int *tokenizer()
+char *tokenizer()
 {
 	char *buf ="abc qwe ccd";
 	int i = 0;
@@ -51,7 +51,7 @@ int *tokenizer()
 	return 0;
 }
 
-int *execute_cmd();
+char *execute_cmd();
 {
 	pid_t pid;
 	char *const args[] = {"/bin/ls", "-l", "/tmp", NULL};
@@ -76,10 +76,7 @@ int process_id(int argc, char **argv)
 	else if (pid == 0)
 	{
 		printf("hello");
-		if (execve(*argv, argv, NULL) < 0)
-			printf("what's up");
-		{
-			printf("Error: exec failed\n");
+		if (execve(*argv, argv, NULL))
 			exit(1);
 		}
 	}
