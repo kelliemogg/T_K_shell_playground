@@ -25,4 +25,10 @@ char *envp[] =
 0
 };
 
+typedef struct commander
+{
+	char *commad;
+	void (*cmd_func)();
+} commander;
+
 #endif /* HEADER_H */
