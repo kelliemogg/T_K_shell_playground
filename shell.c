@@ -33,20 +33,22 @@ char *read_command(void)
 
 char *tokenizer(void)
 {
-	char *buf ="abc qwe ccd";
+	char *buf = "commands and stuff";
 	int i = 0;
-	char *p = strtok (buf, " ");
+	int j = 0;
+	char *token = strtok (buf, " ");
 	char *array[3];
 
-	while (array != NULL)
+	while (token != NULL)
 	{
-		array[i++] = p;
-		p = strtok (NULL, " ");
+		array[i] = token;
+		i++;
+		token = strtok (NULL, " ");
+		j++;
 	}
 
-	for (i = 0; i < 3; ++i)
+	for (i = 0; i < j; i++)
 		printf("%s\n", array[i]);
-
 	return 0;
 }
 
