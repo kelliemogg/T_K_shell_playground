@@ -1,76 +1,64 @@
 #include "header.h"
 
-int read_command(void)
+int main(void)
 {
-        char *prompt = "Enter a command:\n";
-        char *oneword = "One word only please\n";
-        char *buffer;
-        size_t bufsize = 32;
-        char *newline = "\n";
-        int runtime;
-        int userinput;
-        char *exit = "exit";
-        char *pups = "puppies";
-	char *argv[] = {};
-        buffer = malloc(sizeof(char) * bufsize);
+	char *line;
+	char **args;
+	int status;
+	do {
+		printf("$ ");
+		line = read_command();
+		args = tokenizer();
+		status = execute_cmd();
 
-	execve("/bin/ls", argv, NULL);
-
-/*        while (1)
-        {
-                write(STDOUT_FILENO, prompt, stringlength(prompt));
-                userinput = getline(&buffer, &bufsize, stdin);
-                if (_strchr(buffer, ' ') != '\0')
-                        write(STDOUT_FILENO, oneword, stringlength(oneword));
-                if (_strcmp(buffer, pups) == 0)
-                        puppies();
-                if (_strcmp(buffer, exit) == 0)
-                {
-                        break;
-                }
-
-      }
-*/free(buffer);
-	return (0);
+		free (line);
+		free (args);
+	} while (status);
 }
 
-int stringlength(char *s)
+int *read_command(void)
 {
-        int i;
-        for (i = 0; s[i] != '\0'; i++)
-        {}
-	return (i);
+        size_t bufsize = 0;
+        char *line;
+
+	if (getline(&bufsize, &line, stdin))
+	{
+		if (feof(stdin)) /* Or if getline gets to the null byte */
+			exit(EXIT_SUCCESS);
+		else
+			perror("readline");
+		exit(EXIT_FAILURE);
+	}
+	return(line);
 }
 
-int _strcmp(char *s1, char *s2)
+int *tokenizer()
 {
-        for (; *s1 != '\0' && *s2 != '\0'; s1++, s2++)
-        {
-                if (*s1 != *s2)
-                {
-                        return (*s1 - *s2);
-                }
-        }
-	return (0);
+	char *buf ="abc qwe ccd";
+	int i = 0;
+	char *p = strtok (buf, " ");
+	char *array[3];
+
+	while (p != NULL)
+	{
+		array[i++] = p;
+		p = strtok (NULL, " ");
+	}
+
+	for (i = 0; i < 3; ++i)
+		printf("%s\n", array[i]);
+
+	return 0;
 }
 
-char _strchr(char *s, char c)
+int *execute_cmd();
 {
-        int i;
+	pid_t pid;
+	char *const args[] = {"/bin/ls", "-l", "/tmp", NULL};
+	char *const envp[] = {NULL};
+	int i;
 
-        for (i = 0; s[i] >= '\0'; i++)
-        {
-                if (s[i] == c)
-                {
-                        return (1);
-                }
-        }
-	return ('\0');
-}
-
-int puppies(void)
-{
-        printf("Puppies!\n");
+	execve(args[0], args, envp);
 	return (0);
 }
 
