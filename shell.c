@@ -8,8 +8,7 @@ int main(void)
 	do {
 		printf("$ ");
 		line = read_command();
-		args = tokenizer();
-		status = execute_cmd();
+		*args = tokenizer();
 
 		free (line); /*unsure why*/
 		free (args); /* unsure why*/
@@ -21,7 +20,7 @@ char *read_command(void)
         size_t bufsize = 0;
         char *line = NULL;
 
-	if (getline(&bufsize, &line, stdin))
+	if (getline(&line, &bufsize, stdin))
 	{
 		if (feof(stdin)) /* Or if getline gets to the null byte */
 			exit(EXIT_SUCCESS);
@@ -32,14 +31,14 @@ char *read_command(void)
 	return(line);
 }
 
-char *tokenizer()
+char *tokenizer(void)
 {
 	char *buf ="abc qwe ccd";
 	int i = 0;
 	char *p = strtok (buf, " ");
 	char *array[3];
 
-	while (p != NULL)
+	while (array != NULL)
 	{
 		array[i++] = p;
 		p = strtok (NULL, " ");
@@ -51,14 +50,14 @@ char *tokenizer()
 	return 0;
 }
 
-char *execute_cmd();
+int execute_cmd(char **args)
 {
 	pid_t pid;
-	char *const args[] = {"/bin/ls", "-l", "/tmp", NULL};
+	char *const str[] = {"/bin/ls", "-l", "/tmp", NULL};
 	char *const envp[] = {NULL};
 	int i;
 
-	execve(args[0], args, envp);
+	execve(args[0], str, envp);
 	return (0);
 }
 
@@ -78,7 +77,7 @@ int process_id(int argc, char **argv)
 		printf("hello");
 		if (execve(*argv, argv, NULL))
 			exit(1);
-		}
+
 	}
 	else
 	{
