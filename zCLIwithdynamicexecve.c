@@ -43,10 +43,10 @@ int main(void)
 				printf("%s\n", argv[token_inc]);
 				token_inc++;
 			}
-			/*if (*argv != NULL);
+			if (argv[0] != NULL)
 			{
-				printf("1");
-			}*/
+				
+			}
 		}
 	}
 free(buffer);
