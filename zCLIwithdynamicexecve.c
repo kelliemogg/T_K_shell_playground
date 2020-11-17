@@ -5,11 +5,11 @@ int main(void)
 	char *buffer;
 	size_t bufsize = 1024;
 	int userinput;
-	char *prompt = "Enter a command\n";
+	char *prompt = "Enter a command: ";
 	char *exit = "exit";
 	/*tokenizer variables*/
 	int token_inc = 0;
-	char *tokenize = strtok(buffer, " ");
+	char *tokenize;
 	char **argv;
 	int tokencount;
 	int i;
@@ -20,18 +20,33 @@ int main(void)
 	buffer = malloc(sizeof(char) * bufsize);
 	while (1)
 	{
+		tokencount = 0;
 		write(STDOUT_FILENO, prompt, stringlength(prompt));
 		userinput = getline(&buffer, &bufsize, stdin);
+		strtok(buffer, "\n");
 		for (i = 0; buffer[i] != '\0'; i++)
 		{
 			if (buffer[i] == ' ')
+			{
 				tokencount++;
+			}
 		}
 		argv = malloc(8 * (tokencount + 2));
-		while (tokenize != NULL)
-		{
-			argv[token_inc++] = tokenize;
-			tokenize = strtok(NULL, " ");
+		if (argv != NULL)
+		{	
+			token_inc = 0;
+			tokenize = strtok(buffer, " ");
+			while (token_inc < (tokencount + 1))
+			{
+				argv[token_inc] = tokenize;
+				tokenize = strtok(NULL, " ");
+				printf("%s\n", argv[token_inc]);
+				token_inc++;
+			}
+			/*if (*argv != NULL);
+			{
+				printf("1");
+			}*/
 		}
 	}
 free(buffer);
