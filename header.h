@@ -10,13 +10,17 @@
 #include <string.h>
 #include <errno.h>
 
+char *_get_env(char *env);
 char _strchr(char *s, char c);
 int fork_process(void);
 int stringlength(char *s);
 char *read_line(void);
 char *read_command(void);
-char *tokenizer(void);
+int tokenizer(char *);
 int execute_cmd(char **args);
+extern char **environ;
+void _status_on(void);
+int command_i(void);
 
 char *envp[] =
 {
