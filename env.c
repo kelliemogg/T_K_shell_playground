@@ -1,6 +1,6 @@
 #include "header.h"
 
-void* _get_env(char *env)
+char *_get_env(char *env)
 {
         int inner;
         int outer;
@@ -14,9 +14,10 @@ void* _get_env(char *env)
                         if (environ[outer][inner] != env[inner])
                                 continue;
 			if ((environ[outer][inner] == env[inner]) && (environ[outer][inner] != '='))
-			name += environ[outer][inner];
+				name += environ[outer][inner];
+				name = &(environ[outer][inner]);
 			if (environ[outer][inner + 1] == '=')
-				return((void *)environ[outer][inner + 2]);
+				return(name);
                 }
 		printf("\n");
         }
@@ -25,6 +26,6 @@ void* _get_env(char *env)
 
 int main()
 {
-	printf("%p", (void *)_get_env("PATH"));
+	_get_env("PATH");
 	return(0);
 }
