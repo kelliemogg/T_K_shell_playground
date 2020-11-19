@@ -24,6 +24,17 @@ void shell_loop(void)
 free(buffer);
 free(argv);
 }
+int _strcmp(char *s1, char *s2)
+{
+	for (; *s1 != '\0' && *s2 != '\0'; s1++, s2++)
+	{
+		if (*s1 != *s2)
+		{
+			return (*s1 - *s2);
+		}
+	}
+return (0);
+}
 int stringlength(char *s)
 {
         int i;
@@ -65,5 +76,20 @@ return (argv);
 }
 int forkwaitexec(char **argv)
 {
-	pid_t pid;
+	pid_t child_pid;
+	int status;
+
+	child_pid = fork();
+	if (child_pid == -1)
+		perror("Fork failure\n");
+	if (child_pid == 0)
+	{
+		execve(argv[0], argv, NULL);
+	}
+	else
+	{
+		wait(&status);
+	}
+return (1);
 }
+
