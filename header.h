@@ -14,8 +14,22 @@
 /* new prototypes associated with test.c */
 
 char **tokenize(char *userinput);
+
 int stringlength(char *s);
+
 void shell_loop(void);
+
+/*char *builtin_args[] = {
+	"cd",
+	"help",
+	"exit"
+};
+
+int (*builtin_func[] (char **)) = {
+	&_cd,
+	&_home,
+	&_exit
+};*/
 /* new prototypes associated with test.c*/
 
 char _strchr(char *s, char c);
