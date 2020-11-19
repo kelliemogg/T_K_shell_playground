@@ -1,52 +1,85 @@
 #include "header.h"
 
-int main(void)
+int main(int argc, char **argv)
 {
-	char *buffer;
-	size_t bufsize = 1024;
-	int userinput;
-	char *prompt = "$ ";
-	char *exit = "exit";
+        shell_loop();
+	return (0);
+}
 
-	int token_inc = 0;
-	char *tokenize;
-	char **argv;
-	int tokencount;
-	int i;
-	int j;
+void shell_loop(void)
+{
+        int userinput;
+        char **argv;
+        char *buffer;
+        size_t bufsize = 32;
+        char *prompt = "& ";
+	int status;
 
-	pid_t pid;
-
-	buffer = malloc(sizeof(char) * bufsize);
-	while (1)
-	{
-		tokencount = 0;
-		write(STDOUT_FILENO, prompt, stringlength(prompt));
-		userinput = getline(&buffer, &bufsize, stdin);
-		strtok(buffer, "\n");
-		for (i = 0; buffer[i] != '\0'; i++)
-		{
-			if (buffer[i] == ' ')
-			{
-				tokencount++;
-			}
-		}
-		argv = malloc(8 * (tokencount + 2));
+        while (!status)
+        {
+                buffer = malloc(sizeof(char) * bufsize);
+                write(STDOUT_FILENO, prompt, stringlength(prompt));
+                userinput = getline(&buffer, &bufsize, stdin);
+                argv = tokenize(buffer);
 		if (argv != NULL)
 		{
-			token_inc = 0;
-			tokenize = strtok(buffer, " ");
-			while (token_inc < (tokencount + 1))
-			{
-				argv[token_inc] = tokenize;
-				tokenize = strtok(NULL, " ");
-				printf("%s\n", argv[token_inc]);
-				token_inc++;
-			}
+			execve();
+		}
+		free(buffer);
+		free(argv);
+	}
+}
+
+
+char **tokenize(char *userinput)
+{
+        int token_inc = 0;
+        char *tokenize;
+        char **argv;
+        int tokencount = 0;
+        int i;
+
+        strtok(userinput, "\n");
+	for (i = 0; userinput[i] != '\0'; i++)
+	{
+		if (userinput[i] == ' ')
+		{
+			tokencount++;
 		}
 	}
-free(buffer);
-free(*argv);
+	argv = malloc(8 * (tokencount + 2));
+	if (argv != NULL)
+	{
+		token_inc = 0;
+		tokenize = strtok(userinput, " ");
+		while (token_inc < (tokencount + 1))
+		{
+			argv[token_inc] = tokenize;
+			tokenize = strtok(NULL, " ");
+			printf("%s\n", argv[token_inc]);
+			token_inc++;
+		}
+	}
+	return (argv);
+}
+
+int forkwaitexec(char **argv)
+{
+	pid_t child_pid;
+	int status;
+
+	child_pid = fork();
+	if (child_pid == -1)
+		perror("Fork failure\n");
+	if (child_pid == 0)
+	{
+		execve(argv[0], argv, NULL);
+	}
+	else
+	{
+		wait(&status);
+	}
+	return (1);
 }
 
 char *_env_parser(char *name)
@@ -124,28 +157,6 @@ int main()
         return(0);
 }*/
 
-char *_strdup(char *str)
-{
-        char *duplicate;
-        int i;
-        int len = 0;
-
-        if (str == NULL)
-                return (NULL);
-
-        for (len = 0; str[len] != '\0'; len++)
-                ;
-        duplicate = malloc((len + 1) * sizeof(char));
-
-        if (duplicate == NULL)
-                return (NULL);
-
-        for (i = 0; str[i] != '\0'; i++)
-                duplicate[i] = str[i];
-
-
-        return (duplicate);
-}
 
 char *read_command(void)
 {
@@ -200,37 +211,3 @@ int process_id(int argc, char **argv)
 }
 
 
-int _strcmp(char *s1, char *s2)
-{
-        for (; *s1 != '\0' && *s2 != '\0'; s1++, s2++)
-        {
-                if (*s1 != *s2)
-                {
-                        return (*s1 - *s2);
-                }
-        }
-	return (0);
-}
-
-char _strchr(char *s, char c)
-{
-        int i;
-
-        for (i = 0; s[i] >= '\0'; i++)
-        {
-                if (s[i] == c)
-                {
-                        return (1);
-                }
-        }
-	return ('\0');
-}
-int stringlength(char *s)
-{
-        int i;
-
-        for (i = 0; s[i] != '\0'; i++)
-
-	{}
-	return (i);
-}
