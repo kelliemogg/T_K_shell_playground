@@ -234,4 +234,3 @@ int stringlength(char *s)
 	{}
 	return (i);
 }
-

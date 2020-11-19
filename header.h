@@ -9,6 +9,7 @@
 #include <stdarg.h>
 #include <string.h>
 #include <errno.h>
+#include <strings.h>
 
 /* new prototypes associated with test.c */
 
@@ -17,24 +18,25 @@ int stringlength(char *s);
 void shell_loop(void);
 /* new prototypes associated with test.c*/
 
-char *_get_env(char *env);
 char _strchr(char *s, char c);
 int fork_process(void);
 char *read_line(void);
 char *read_command(void);
 int execute_cmd(char **args);
-extern char **environ;
 void _status_on(void);
 int command_i(void);
+
+/* prototypes for env and parsing env */
+typedef struct node
+{
+        char *str;
+        struct node *next;
+} node;
 char *_strdup(char *str);
 char *_env_parser(char *name);
-
-char *envp[] =
-{
-	"HOME=/",
-	"PATH=/bin:usr/bin",
-0
-};
+char *_get_env(char *env);
+extern char **environ;
+void create(node **head, node **tail, char **str);
 
 typedef struct commander
 {
