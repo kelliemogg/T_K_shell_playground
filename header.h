@@ -26,6 +26,8 @@ int execute_cmd(char **args);
 extern char **environ;
 void _status_on(void);
 int command_i(void);
+char *_strdup(char *str);
+char *_env_parser(char *name);
 
 char *envp[] =
 {
