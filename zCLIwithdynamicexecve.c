@@ -16,7 +16,7 @@ int main(void)
 	int j;
 	/*execve variables*/
 	pid_t pid;
-		
+
 	buffer = malloc(sizeof(char) * bufsize);
 	while (1)
 	{
@@ -33,7 +33,7 @@ int main(void)
 		}
 		argv = malloc(8 * (tokencount + 2));
 		if (argv != NULL)
-		{	
+		{
 			token_inc = 0;
 			tokenize = strtok(buffer, " ");
 			while (token_inc < (tokencount + 1))
@@ -43,12 +43,11 @@ int main(void)
 				printf("%s\n", argv[token_inc]);
 				token_inc++;
 			}
-			if (argv[0] != NULL)
-			{
-				
-			}
+			if (token_inc == 1)
+				break;
 		}
 	}
+
 free(buffer);
 free(*argv);
 }
@@ -57,7 +56,8 @@ int stringlength(char *s)
 	int i;
 
 	for (i = 0; s[i] != '\0'; i++)
-	{}
+
+			{}
 return (i);
 }
 int _strcmp(char *s1, char *s2)
