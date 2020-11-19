@@ -21,7 +21,8 @@ void shell_loop(void)
                 argv = tokenize(buffer);
 		
         }
-
+free(buffer);
+free(argv);
 }
 int stringlength(char *s)
 {
@@ -61,4 +62,8 @@ char **tokenize(char *userinput)
                         }
                 }
 return (argv);
+}
+int forkwaitexec(char **argv)
+{
+	pid_t pid;
 }
