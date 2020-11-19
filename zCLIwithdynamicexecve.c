@@ -43,14 +43,12 @@ int main(void)
 				printf("%s\n", argv[token_inc]);
 				token_inc++;
 			}
-			if (argv[0] != NULL)
-			{
-				
-			}
+			if (token_inc == 1)
+				break;
 		}
 	}
 free(buffer);
-free(*argv);
+free(argv);
 }
 int stringlength(char *s)
 {
