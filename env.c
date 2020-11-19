@@ -33,40 +33,37 @@ char *_env_parser(char *name)
 	int tokencount;
 	char *tokenize;
 	int i;
-	char **argv;
-	const char *linked;
+	char **p;
 
-	while(name != NULL)
+	/* if (name != NULL)
 	{
+	printf("nope. fuck.\n"); */
 		tokencount = 0;
-		for (i = 0; name[i] != '\0'; i++)
+		for(i = 0; name[i] != '\0'; i++)
 		{
-			if (name[i] == ':')
+			if(name[i] == ':')
 			{
 				tokencount++;
 			}
 		}
-		argv = malloc(8 * (tokencount + 1));
-		if (argv != NULL)
+		p = malloc(8 * (tokencount + 2));
+		if(p != NULL)
 		{
 			token_inc = 0;
 			tokenize = strtok(name, ":");
-			while (token_inc < (tokencount + 1))
+			while(token_inc < (tokencount + 1))
 			{
-				argv[token_inc] = tokenize;
+				p[token_inc] = tokenize;
 				tokenize = strtok(NULL, ":");
-				linked = create(tokenize);
-				printf("%s\n", argv[token_inc]);
+				printf("%s\n", p[token_inc]);
 				token_inc++;
 			}
 		}
-		break;
-	}
-	free(*argv);
+	return (*p);
 }
 
 
-void create(node **head, node **tail, char **str)
+/* list_t *create_node(char *str)
 {
 	node *new_dir = (node*)malloc(sizeof(node));
 	int length = _strlen(*str);
