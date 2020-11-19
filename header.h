@@ -10,13 +10,18 @@
 #include <string.h>
 #include <errno.h>
 
+/* new prototypes associated with test.c */
+
+char **tokenize(char *userinput);
+int stringlength(char *s);
+void shell_loop(void);
+/* new prototypes associated with test.c*/
+
 char *_get_env(char *env);
 char _strchr(char *s, char c);
 int fork_process(void);
-int stringlength(char *s);
 char *read_line(void);
 char *read_command(void);
-int tokenizer(char *);
 int execute_cmd(char **args);
 extern char **environ;
 void _status_on(void);

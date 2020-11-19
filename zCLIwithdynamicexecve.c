@@ -49,7 +49,7 @@ int main(void)
 	}
 
 free(buffer);
-free(*argv);
+free(argv);
 }
 int stringlength(char *s)
 {
