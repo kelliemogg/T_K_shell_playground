@@ -13,13 +13,15 @@ void shell_loop(void)
         char *prompt = "& ";
 	int status;
 
-        while (!status)
+        while (status = 1)
         {
                 buffer = malloc(sizeof(char) * bufsize);
                 write(STDOUT_FILENO, prompt, stringlength(prompt));
                 userinput = getline(&buffer, &bufsize, stdin);
                 argv = tokenize(buffer);
-		
+		status = function_finder(argv);
+		if (status == 0)
+			break;
         }
 free(buffer);
 free(argv);
@@ -74,10 +76,9 @@ char **tokenize(char *userinput)
                 }
 return (argv);
 }
-int forkwaitexec(char **argv)
+int executor(char **argv)
 {
 	pid_t child_pid;
-	int status;
 
 	child_pid = fork();
 	if (child_pid == -1)
@@ -88,8 +89,27 @@ int forkwaitexec(char **argv)
 	}
 	else
 	{
-		wait(&status);
+		wait(NULL);
 	}
 return (1);
 }
+int function_finder(char **argv)
+{
+	int i;
 
+	if (argv[0] != NULL)
+	{
+		for (i = 0; i < 2; i++)
+		{
+			if (_strcmp(argv[0], builtin_args[i]) == 0)
+				return ((*builtin_func[i])(argv));
+		}
+	}
+	else
+		return (executor(argv));
+}
+
+int sh_exit(char **argv)
+{
+	return (0);
+}

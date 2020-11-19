@@ -19,17 +19,19 @@ int stringlength(char *s);
 
 void shell_loop(void);
 
-/*char *builtin_args[] = {
-	"cd",
-	"help",
+int executor(char **argv);
+
+int function_finder(char **argv);
+
+int sh_exit(char **argv);
+
+char *builtin_args[] = {
 	"exit"
 };
 
-int (*builtin_func[] (char **)) = {
-	&_cd,
-	&_home,
-	&_exit
-};*/
+int (*builtin_func[]) (char **) = {
+	&sh_exit
+};
 /* new prototypes associated with test.c*/
 
 char _strchr(char *s, char c);
