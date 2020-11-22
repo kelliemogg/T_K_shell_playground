@@ -9,15 +9,19 @@ void shell_loop(void)
         int userinput;
         char **argv;
         char *buffer;
-        size_t bufsize = 32;
+        size_t bufsize = 1;
         char *prompt = "& ";
 	int status;
 
         while (status = 1)
         {
                 buffer = malloc(sizeof(char) * bufsize);
+		if (buffer == NULL)
+			perror("Malloc failure\n");
                 write(STDOUT_FILENO, prompt, stringlength(prompt));
                 userinput = getline(&buffer, &bufsize, stdin);
+		if (userinput == -1)
+			break;
                 argv = tokenize(buffer);
 		status = function_finder(argv);
 		if (status == 0)
@@ -115,7 +119,8 @@ int sh_exit(char **argv)
 }
 int sh_env(char **argv)
 {
-	return (1);
+	_get_env(__FILE__);
+return (1);
 }
 int sh_cd(char **argv)
 {
@@ -137,4 +142,85 @@ int sh_help(char **argv)
 	printf("cd\n");
 	printf("exit\n");
 return (1);
+}
+#include "header.h"
+
+char *_get_env(char *env)
+{
+        int inner;
+        int outer;
+        char *name;
+        char *parse;
+
+        for (outer = 0; environ[outer] != NULL; outer++)
+        {
+                for (inner = 0; environ[outer][inner] != '='; inner++)
+                {
+                        /* printf("%c", environ[outer][inner]); */
+                        if (environ[outer][inner] != env[inner])
+                                break;
+                        if (environ[outer][inner] == env[inner])
+                        {
+                                if (env[inner + 1] == '\0' && environ[outer][inner + 1] == '=')
+                                {
+                                        name = _strdup(&(environ[outer][inner + 2]));
+                                        _env_parser(name);
+                                }
+                        }
+                }
+        }
+        return(NULL);
+}
+char *_env_parser(char *name)
+{
+	int token_inc;
+	int tokencount;
+	char *tokenize;
+	int i;
+	char **p;
+
+	tokencount = 0;
+	for(i = 0; name[i] != '\0'; i++)
+	{
+		if(name[i] == ':')
+		{
+			tokencount++;
+		}
+	}
+	p = malloc(8 * (tokencount + 2));
+	if(p != NULL)
+	{
+		token_inc = 0;
+		tokenize = strtok(name, ":");
+		while(token_inc < (tokencount + 1))
+		{
+			p[token_inc] = tokenize;
+			tokenize = strtok(NULL, ":");
+			printf("%s\n", p[token_inc]);
+			token_inc++;
+		}
+	}
+	return (*p);
+}
+char *_strdup(char *str)
+{
+	char *duplicate;
+	int i;
+	int len = 0;
+
+	if (str == NULL)
+		return (NULL);
+
+	for (len = 0; str[len] != '\0'; len++)
+		;
+	duplicate = malloc((len + 1) * sizeof(char));
+
+	if (duplicate == NULL)
+		return (NULL);
+
+	for (i = 0; str[i] != '\0'; i++)
+		duplicate[i] = str[i];
+
+
+	return (duplicate);
 }

@@ -10,6 +10,7 @@
 #include <string.h>
 #include <errno.h>
 #include <strings.h>
+#include <stddef.h>
 
 /* new prototypes associated with test.c */
 
@@ -25,11 +26,23 @@ int function_finder(char **argv);
 
 int sh_exit(char **argv);
 
+int sh_help(char **argv);
+
+int sh_cd(char **argv);
+
+int sh_env(char **argv);
+
 char *builtin_args[] = {
+	"cd",
+	"help",
+	"env",
 	"exit"
 };
 
 int (*builtin_func[]) (char **) = {
+	&sh_cd,
+	&sh_help,
+	&sh_env,
 	&sh_exit
 };
 /* new prototypes associated with test.c*/
