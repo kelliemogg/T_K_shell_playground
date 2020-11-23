@@ -47,6 +47,7 @@ int (*builtin_func[]) (char **) = {
 };
 /* new prototypes associated with test.c*/
 
+int _putchar(char c);
 char _strchr(char *s, char c);
 int fork_process(void);
 char *read_line(void);
